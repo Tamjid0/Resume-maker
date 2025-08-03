@@ -5,9 +5,9 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
-import Templates from './pages/Templates'
+import {Templates} from './pages/Templates'
 import Account from './pages/Account'
-import ResumeBuilder from './pages/ResumeBuilder'
+import {ResumeBuilder} from './pages/ResumeBuilder'
 
 function App() {
   return (

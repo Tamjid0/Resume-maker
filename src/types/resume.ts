@@ -1,4 +1,4 @@
-// Resume types adapted from Open Resume
+// src/types/resume.ts - Complete Resume Types from Open Resume
 export interface ResumeProfile {
   name: string;
   email: string;
@@ -9,7 +9,6 @@ export interface ResumeProfile {
 }
 
 export interface ResumeWorkExperience {
-  id: string;
   company: string;
   jobTitle: string;
   date: string;
@@ -17,7 +16,6 @@ export interface ResumeWorkExperience {
 }
 
 export interface ResumeEducation {
-  id: string;
   school: string;
   degree: string;
   date: string;
@@ -26,7 +24,6 @@ export interface ResumeEducation {
 }
 
 export interface ResumeProject {
-  id: string;
   project: string;
   date: string;
   descriptions: string[];
@@ -50,13 +47,57 @@ export interface Resume {
   custom: ResumeCustom;
 }
 
+export const DEFAULT_RESUME: Resume = {
+  profile: {
+    name: "",
+    email: "",
+    phone: "",
+    url: "",
+    summary: "",
+    location: "",
+  },
+  workExperiences: [
+    {
+      company: "",
+      jobTitle: "",
+      date: "",
+      descriptions: [""],
+    },
+  ],
+  educations: [
+    {
+      school: "",
+      degree: "",
+      date: "",
+      gpa: "",
+      descriptions: [""],
+    },
+  ],
+  projects: [
+    {
+      project: "",
+      date: "",
+      descriptions: [""],
+    },
+  ],
+  skills: {
+    featuredSkills: [""],
+    descriptions: [""],
+  },
+  custom: {
+    descriptions: [""],
+  },
+};
+
+// Resume Settings Types
 export interface ResumeSettings {
-  fontSize: number;
+  themeColor: string;
   fontFamily: string;
+  fontSize: string;
   documentSize: string;
   formToShow: {
     workExperiences: boolean;
-    educations: boolean;
+    educations: boolean;  
     projects: boolean;
     skills: boolean;
     custom: boolean;
@@ -69,39 +110,12 @@ export interface ResumeSettings {
     custom: string;
   };
   formsOrder: string[];
-  showBulletPoints: {
-    workExperiences: boolean;
-    educations: boolean;
-    projects: boolean;
-    skills: boolean;
-    custom: boolean;
-  };
 }
 
-export const INITIAL_RESUME: Resume = {
-  profile: {
-    name: "",
-    email: "",
-    phone: "",
-    url: "",
-    summary: "",
-    location: "",
-  },
-  workExperiences: [],
-  educations: [],
-  projects: [],
-  skills: {
-    featuredSkills: [],
-    descriptions: [],
-  },
-  custom: {
-    descriptions: [],
-  },
-};
-
-export const INITIAL_SETTINGS: ResumeSettings = {
-  fontSize: 11,
-  fontFamily: "Roboto",
+export const DEFAULT_RESUME_SETTINGS: ResumeSettings = {
+  themeColor: "#4361ee",
+  fontFamily: "system-ui",
+  fontSize: "11",
   documentSize: "Letter",
   formToShow: {
     workExperiences: true,
@@ -112,17 +126,10 @@ export const INITIAL_SETTINGS: ResumeSettings = {
   },
   formToHeading: {
     workExperiences: "WORK EXPERIENCE",
-    educations: "EDUCATION",
+    educations: "EDUCATION", 
     projects: "PROJECTS",
     skills: "SKILLS",
     custom: "CUSTOM SECTION",
   },
   formsOrder: ["workExperiences", "educations", "projects", "skills", "custom"],
-  showBulletPoints: {
-    workExperiences: true,
-    educations: true,
-    projects: true,
-    skills: true,
-    custom: true,
-  },
 };

@@ -1,62 +1,167 @@
-// src/store/resumeSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Resume, INITIAL_RESUME, ResumeSettings, INITIAL_SETTINGS } from '../types/resume'
+// src/store/resumeSlice.ts - Redux slice for resume data
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Resume, ResumeSettings, DEFAULT_RESUME, DEFAULT_RESUME_SETTINGS } from '../types/resume';
 
 interface ResumeState {
-  resume: Resume
-  settings: ResumeSettings
+  resume: Resume;
+  settings: ResumeSettings;
 }
 
 const initialState: ResumeState = {
-  resume: INITIAL_RESUME,
-  settings: INITIAL_SETTINGS,
-}
+  resume: DEFAULT_RESUME,
+  settings: DEFAULT_RESUME_SETTINGS,
+};
 
 const resumeSlice = createSlice({
   name: 'resume',
   initialState,
   reducers: {
-    updateProfile: (state, action: PayloadAction<Partial<Resume['profile']>>) => {
-      state.resume.profile = { ...state.resume.profile, ...action.payload }
+    // Profile actions
+    changeProfile: (state, action: PayloadAction<{ field: keyof Resume['profile']; value: string }>) => {
+      const { field, value } = action.payload;
+      state.resume.profile[field] = value;
     },
-    updateWorkExperiences: (state, action: PayloadAction<Resume['workExperiences']>) => {
-      state.resume.workExperiences = action.payload
+
+    // Work Experience actions
+    changeWorkExperience: (
+      state,
+      action: PayloadAction<{
+        idx: number;
+        field: keyof Resume['workExperiences'][0];
+        value: string | string[];
+      }>
+    ) => {
+      const { idx, field, value } = action.payload;
+      if (state.resume.workExperiences[idx]) {
+        (state.resume.workExperiences[idx] as any)[field] = value;
+      }
     },
-    updateEducations: (state, action: PayloadAction<Resume['educations']>) => {
-      state.resume.educations = action.payload
+
+    addWorkExperience: (state) => {
+      state.resume.workExperiences.push({
+        company: '',
+        jobTitle: '',
+        date: '',
+        descriptions: [''],
+      });
     },
-    updateProjects: (state, action: PayloadAction<Resume['projects']>) => {
-      state.resume.projects = action.payload
+
+    removeWorkExperience: (state, action: PayloadAction<number>) => {
+      state.resume.workExperiences.splice(action.payload, 1);
     },
-    updateSkills: (state, action: PayloadAction<Resume['skills']>) => {
-      state.resume.skills = action.payload
+
+    // Education actions
+    changeEducation: (
+      state,
+      action: PayloadAction<{
+        idx: number;
+        field: keyof Resume['educations'][0];
+        value: string | string[];
+      }>
+    ) => {
+      const { idx, field, value } = action.payload;
+      if (state.resume.educations[idx]) {
+        (state.resume.educations[idx] as any)[field] = value;
+      }
     },
-    updateCustom: (state, action: PayloadAction<Resume['custom']>) => {
-      state.resume.custom = action.payload
+
+    addEducation: (state) => {
+      state.resume.educations.push({
+        school: '',
+        degree: '',
+        date: '',
+        gpa: '',
+        descriptions: [''],
+      });
     },
-    updateSettings: (state, action: PayloadAction<Partial<ResumeSettings>>) => {
-      state.settings = { ...state.settings, ...action.payload }
+
+    removeEducation: (state, action: PayloadAction<number>) => {
+      state.resume.educations.splice(action.payload, 1);
     },
+
+    // Project actions
+    changeProject: (
+      state,
+      action: PayloadAction<{
+        idx: number;
+        field: keyof Resume['projects'][0];
+        value: string | string[];
+      }>
+    ) => {
+      const { idx, field, value } = action.payload;
+      if (state.resume.projects[idx]) {
+        (state.resume.projects[idx] as any)[field] = value;
+      }
+    },
+
+    addProject: (state) => {
+      state.resume.projects.push({
+        project: '',
+        date: '',
+        descriptions: [''],
+      });
+    },
+
+    removeProject: (state, action: PayloadAction<number>) => {
+      state.resume.projects.splice(action.payload, 1);
+    },
+
+    // Skills actions  
+    changeSkills: (
+      state,
+      action: PayloadAction<{ field: keyof Resume['skills']; value: string[] }>
+    ) => {
+      const { field, value } = action.payload;
+      state.resume.skills[field] = value;
+    },
+
+    // Custom section actions
+    changeCustom: (
+      state,
+      action: PayloadAction<{ field: keyof Resume['custom']; value: string[] }>
+    ) => {
+      const { field, value } = action.payload;
+      state.resume.custom[field] = value;
+    },
+
+    // Settings actions
+    changeSettings: (
+      state,
+      action: PayloadAction<{ field: keyof ResumeSettings; value: any }>
+    ) => {
+      const { field, value } = action.payload;
+      (state.settings as any)[field] = value;
+    },
+
+    // Import resume from PDF
     setResume: (state, action: PayloadAction<Resume>) => {
-      state.resume = action.payload
+      state.resume = action.payload;
     },
+
+    // Reset resume
     resetResume: (state) => {
-      state.resume = INITIAL_RESUME
-      state.settings = INITIAL_SETTINGS
+      state.resume = DEFAULT_RESUME;
+      state.settings = DEFAULT_RESUME_SETTINGS;
     },
   },
-})
+});
 
 export const {
-  updateProfile,
-  updateWorkExperiences,
-  updateEducations,
-  updateProjects,
-  updateSkills,
-  updateCustom,
-  updateSettings,
+  changeProfile,
+  changeWorkExperience,
+  addWorkExperience,
+  removeWorkExperience,
+  changeEducation,
+  addEducation,
+  removeEducation,
+  changeProject,
+  addProject,
+  removeProject,
+  changeSkills,
+  changeCustom,
+  changeSettings,
   setResume,
   resetResume,
-} = resumeSlice.actions
+} = resumeSlice.actions;
 
-export default resumeSlice.reducer
+export default resumeSlice.reducer;
